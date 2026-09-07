@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Start Admission — Qalamify</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#C11A21;
+    --red-deep:#8F1319;
+    --gold:#C1982D;
+    --gold-soft:#E7CE8E;
+    --grey:#C8C8C8;
+    --grey-soft:#F1EFEC;
+    --ink:#221F1D;
+    --slate:#6B6663;
+    --paper:#FFFFFF;
+    --ok:#2F6F4E;
+    --err:#B3261E;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--grey-soft);color:var(--ink);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
+  h1,h2,.display{font-family:'Poppins',sans-serif;font-weight:700;margin:0;letter-spacing:-0.01em;}
+  a{text-decoration:none;color:inherit;}
+  :focus-visible{outline:2px solid var(--red);outline-offset:3px;}
+
+  .nav{background:var(--paper);border-bottom:1px solid #EEE9E3;}
+  .nav-row{max-width:1000px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;}
+  .logo{display:flex;align-items:center;gap:10px;}
+  .logo svg{width:30px;height:30px;}
+  .logo-word{font-family:'Poppins',sans-serif;font-weight:800;font-size:19px;}
+  .logo-word em{font-style:normal;color:var(--red);}
+  .back-link{font-size:13.5px;font-weight:600;color:var(--slate);display:flex;align-items:center;gap:6px;}
+  .back-link:hover{color:var(--red);}
+
+  .page{max-width:1000px;margin:0 auto;padding:52px 24px 80px;display:grid;grid-template-columns:0.85fr 1.15fr;gap:44px;align-items:flex-start;}
+  @media(max-width:860px){.page{grid-template-columns:1fr;}}
+
+  .side .eyebrow{font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--red);}
+  .side h1{font-size:clamp(26px,3.4vw,34px);line-height:1.15;margin-top:12px;}
+  .side p{color:var(--slate);font-size:15px;line-height:1.65;margin-top:14px;max-width:40ch;}
+  .side-list{list-style:none;margin:28px 0 0;padding:0;display:flex;flex-direction:column;gap:16px;}
+  .side-list li{display:flex;gap:12px;font-size:14px;color:var(--ink);align-items:flex-start;}
+  .side-list svg{width:18px;height:18px;color:var(--red);flex-shrink:0;margin-top:2px;}
+
+  .card{background:var(--paper);border-radius:16px;border:1px solid #EEE9E3;box-shadow:0 30px 60px -34px rgba(34,31,29,0.25);padding:36px;}
+  .card h2{font-size:20px;margin-bottom:6px;}
+  .card .sub{color:var(--slate);font-size:13.5px;margin-bottom:26px;}
+
+  .field{margin-bottom:18px;}
+  .field label{display:block;font-size:13px;font-weight:600;margin-bottom:7px;}
+  .field .req{color:var(--red);}
+  .field input, .field select, .field textarea{
+    width:100%;padding:12px 14px;border-radius:8px;border:1.5px solid #E3DED7;
+    font-family:'Inter',sans-serif;font-size:14.5px;color:var(--ink);background:var(--paper);
+    transition:border-color .2s;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{border-color:var(--red);}
+  .field textarea{resize:vertical;min-height:80px;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:520px){.row2{grid-template-columns:1fr;}}
+
+  .submit-btn{
+    width:100%;padding:14px 20px;border-radius:8px;border:none;background:var(--red);
+    color:var(--paper);font-family:'Poppins',sans-serif;font-weight:700;font-size:15px;
+    cursor:pointer;transition:background .2s,transform .15s;display:flex;align-items:center;justify-content:center;gap:10px;
+  }
+  .submit-btn:hover{background:var(--red-deep);}
+  .submit-btn:disabled{opacity:0.65;cursor:not-allowed;transform:none;}
+  .spinner{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;animation:spin .7s linear infinite;display:none;}
+  .submit-btn.loading .spinner{display:inline-block;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .form-msg{margin-top:14px;font-size:13.5px;padding:12px 14px;border-radius:8px;display:none;}
+  .form-msg.show{display:block;}
+  .form-msg.ok{background:#EAF4EE;color:var(--ok);border:1px solid #CFE8D8;}
+  .form-msg.err{background:#FBEAEA;color:var(--err);border:1px solid #F1CFCF;}
+
+  .success-state{text-align:center;padding:20px 0;}
+  .success-state .tick{
+    width:56px;height:56px;border-radius:50%;background:#EAF4EE;color:var(--ok);
+    display:flex;align-items:center;justify-content:center;margin:0 auto 18px;
+  }
+  .success-state h2{font-size:20px;margin-bottom:8px;}
+  .success-state p{color:var(--slate);font-size:14px;line-height:1.6;}
+  .success-state .btn-again{display:inline-block;margin-top:18px;font-size:13.5px;font-weight:700;color:var(--red);}
+
+  .footnote{margin-top:22px;font-size:12px;color:var(--slate);text-align:center;line-height:1.6;}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="nav-row">
+    <a href="index.html" class="logo">
+      <img src="assets/qalamify-icon.png" alt="Qalamify" width="30" height="30">
+      <span class="logo-word">Qalam<em>ify</em></span>
+    </a>
+    <a href="index.html" class="back-link">&larr; Back to site</a>
+  </div>
+</div>
+
+<div class="page">
+  <div class="side">
+    <span class="eyebrow">Admission Form</span>
+    <h1>Let's get your seat reserved.</h1>
+    <p>Fill this in and a mentor from your exam track will call you within one working day to confirm your batch.</p>
+    <ul class="side-list">
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Free 20-minute counselling call</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>No payment required to register interest</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Batch and fee details shared on the call</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div id="formView">
+      <h2>Registration form</h2>
+      <div class="sub">Fields marked <span class="req">*</span> are required.</div>
+
+      <form id="admissionForm">
+        <div class="row2">
+          <div class="field">
+            <label for="fullName">Full name <span class="req">*</span></label>
+            <input type="text" id="fullName" name="fullName" required autocomplete="name">
+          </div>
+          <div class="field">
+            <label for="phone">Phone number <span class="req">*</span></label>
+            <input type="tel" id="phone" name="phone" required autocomplete="tel">
+          </div>
+        </div>
+
+        <div class="row2">
+          <div class="field">
+            <label for="email">Email <span class="req">*</span></label>
+            <input type="email" id="email" name="email" required autocomplete="email">
+          </div>
+          <div class="field">
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" autocomplete="address-level2">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="program">Program <span class="req">*</span></label>
+          <select id="program" name="program" required>
+            <option value="" disabled selected>Select a program</option>
+            <option value="CUET UG">CUET UG</option>
+            <option value="CUET PG">CUET PG</option>
+            <option value="NMMS">NMMS</option>
+            <option value="UGC NET">UGC NET</option>
+            <option value="NCET">NCET</option>
+            <option value="GATE">GATE</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="message">Anything we should know?</label>
+          <textarea id="message" name="message" placeholder="Previous attempts, target exam date, specific doubts, etc."></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">
+          <span class="spinner"></span>
+          <span class="btn-text">Submit registration</span>
+        </button>
+
+        <div class="form-msg" id="formMsg"></div>
+      </form>
+    </div>
+
+    <div id="successView" style="display:none;">
+      <div class="success-state">
+        <div class="tick">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
+        </div>
+        <h2>You're registered.</h2>
+        <p>Thanks — a Qalamify mentor will reach out within one working day to confirm your batch and next steps.</p>
+        <a href="#" class="btn-again" id="registerAnother">Register another student &rarr;</a>
+      </div>
+    </div>
+
+    <div class="footnote">By submitting, you agree to be contacted by Qalamify about admissions. We don't share your details with third parties.</div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="assets/config.js"></script>
+<script>
+  const form = document.getElementById('admissionForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const formMsg = document.getElementById('formMsg');
+  const formView = document.getElementById('formView');
+  const successView = document.getElementById('successView');
+  const sbClient = supabase.createClient(QALAMIFY_CONFIG.SUPABASE_URL, QALAMIFY_CONFIG.SUPABASE_ANON_KEY);
+
+  function showSuccess() {
+    formView.style.display = 'none';
+    successView.style.display = 'block';
+    submitBtn.classList.remove('loading');
+    submitBtn.disabled = false;
+  }
+
+  function showMessage(text, type) {
+    formMsg.textContent = text;
+    formMsg.className = 'form-msg show ' + type;
+  }
+
+  document.getElementById('registerAnother').addEventListener('click', function (e) {
+    e.preventDefault();
+    form.reset();
+    formMsg.className = 'form-msg';
+    successView.style.display = 'none';
+    formView.style.display = 'block';
+  });
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    if (QALAMIFY_CONFIG.SUPABASE_URL.indexOf('PASTE_YOUR') === 0) {
+      showMessage('This form isn\'t connected to a database yet — follow SETUP.md to add your Supabase details.', 'err');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.classList.add('loading');
+    formMsg.className = 'form-msg';
+
+    const { error } = await sbClient.from('registrations').insert({
+      full_name: document.getElementById('fullName').value,
+      email: document.getElementById('email').value,
+      phone: document.getElementById('phone').value,
+      program: document.getElementById('program').value,
+      city: document.getElementById('city').value,
+      message: document.getElementById('message').value
+    });
+
+    submitBtn.disabled = false;
+    submitBtn.classList.remove('loading');
+
+    if (error) {
+      showMessage('Something went wrong — please try again in a moment.', 'err');
+      return;
+    }
+    showSuccess();
+  });
+</script>
+
+</body>
+</html>

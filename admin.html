@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Qalamify — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#C11A21; --red-deep:#8F1319; --gold:#C1982D; --gold-soft:#E7CE8E;
+    --grey-soft:#F1EFEC; --ink:#221F1D; --slate:#6B6663; --paper:#FFFFFF;
+    --ok:#2F6F4E; --err:#B3261E;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--grey-soft);color:var(--ink);font-family:'Inter',sans-serif;}
+  h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;margin:0;}
+  a{color:inherit;}
+  .wrap{max-width:900px;margin:0 auto;padding:36px 20px 80px;}
+
+  /* ---- login gate ---- */
+  #gate{position:fixed;inset:0;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;z-index:100;}
+  .gate-box{background:#2E2A27;padding:36px 32px;border-radius:14px;width:min(360px,90vw);text-align:center;}
+  .gate-box h1{font-size:19px;margin-bottom:6px;}
+  .gate-box p{font-size:13px;color:rgba(255,255,255,0.6);margin:0 0 20px;}
+  .gate-box input{width:100%;padding:12px 14px;border-radius:8px;border:1.5px solid #4a4340;background:#221F1D;color:#fff;font-size:14.5px;margin-bottom:12px;}
+  .gate-box button{width:100%;padding:12px;border-radius:8px;border:none;background:var(--red);color:#fff;font-weight:700;font-size:14px;cursor:pointer;}
+  .gate-box button:hover{background:var(--red-deep);}
+  .gate-box button:disabled{opacity:0.6;cursor:not-allowed;}
+  .gate-err{color:#ff8a8a;font-size:12.5px;margin-top:10px;min-height:16px;}
+
+  header.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:36px;flex-wrap:wrap;gap:12px;}
+  header.top .logo{display:flex;align-items:center;gap:10px;}
+  header.top img{width:30px;height:30px;}
+  header.top .logo-word{font-family:'Poppins',sans-serif;font-weight:800;font-size:19px;}
+  header.top .logo-word em{font-style:normal;color:var(--red);}
+  header.top .right{display:flex;align-items:center;gap:16px;}
+  header.top .email-pill{font-size:12px;color:var(--slate);}
+  header.top a.back, header.top button.logout{font-size:13px;font-weight:600;color:var(--slate);background:none;border:none;cursor:pointer;font-family:inherit;}
+  header.top a.back:hover, header.top button.logout:hover{color:var(--red);}
+
+  .tabs{display:flex;gap:6px;margin-bottom:24px;flex-wrap:wrap;}
+  .tab-btn{padding:9px 16px;border-radius:20px;border:1px solid #E3DED7;background:var(--paper);font-size:13px;font-weight:600;cursor:pointer;color:var(--slate);}
+  .tab-btn.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block;}
+
+  .panel{background:var(--paper);border:1px solid #EEE9E3;border-radius:14px;padding:28px 26px;margin-bottom:28px;}
+  .panel h2{font-size:18px;margin-bottom:4px;}
+  .panel .sub{font-size:13px;color:var(--slate);margin-bottom:22px;}
+
+  .field{margin-bottom:16px;}
+  .field label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;}
+  .field input, .field select{width:100%;padding:11px 13px;border-radius:8px;border:1.5px solid #E3DED7;font-size:14px;font-family:'Inter',sans-serif;}
+  .field input:focus, .field select:focus{border-color:var(--red);outline:none;}
+  .field .hint{font-size:12px;color:var(--slate);margin-top:5px;line-height:1.5;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media(max-width:560px){.row2{grid-template-columns:1fr;}}
+
+  .btn{padding:11px 20px;border-radius:8px;border:none;font-family:'Poppins',sans-serif;font-weight:700;font-size:13.5px;cursor:pointer;transition:background .2s;}
+  .btn-primary{background:var(--red);color:#fff;}
+  .btn-primary:hover{background:var(--red-deep);}
+  .btn-primary:disabled{opacity:0.6;cursor:not-allowed;}
+  .btn-secondary{background:var(--grey-soft);color:var(--ink);}
+  .btn-secondary:hover{background:#E7E2DB;}
+  .btn-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+
+  .msg{margin-top:14px;font-size:13px;padding:10px 13px;border-radius:8px;display:none;}
+  .msg.show{display:block;}
+  .msg.ok{background:#EAF4EE;color:var(--ok);}
+  .msg.err{background:#FBEAEA;color:var(--err);}
+
+  table.list{width:100%;border-collapse:collapse;margin-top:6px;}
+  table.list th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:var(--slate);padding:8px 10px;border-bottom:2px solid var(--ink);}
+  table.list td{padding:10px;border-bottom:1px solid #EEE9E3;font-size:13.5px;vertical-align:middle;}
+  table.list img.thumb{width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;background:var(--grey-soft);}
+  .thumb-fallback{width:38px;height:38px;border-radius:8px;background:var(--grey-soft);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--red);}
+  .pill{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:600;}
+  .pill.active{background:#EAF4EE;color:var(--ok);}
+  .pill.inactive{background:#F1EFEC;color:var(--slate);}
+  .link-btn{font-size:12.5px;font-weight:700;color:var(--red);background:none;border:none;cursor:pointer;padding:0;}
+  .link-btn.danger{color:var(--err);}
+  .empty-note{font-size:13px;color:var(--slate);padding:14px 0;}
+
+  .upload-row{display:flex;align-items:center;gap:12px;margin-bottom:6px;}
+  .upload-row img{width:56px;height:56px;border-radius:10px;object-fit:cover;background:var(--grey-soft);}
+  .upload-progress{font-size:12px;color:var(--slate);}
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="gate-box">
+    <h1>Qalamify Admin</h1>
+    <p>Sign in with your admin email and password.</p>
+    <input type="email" id="loginEmail" placeholder="Email" autocomplete="username">
+    <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
+    <button id="loginBtn">Sign in</button>
+    <div class="gate-err" id="gateErr"></div>
+  </div>
+</div>
+
+<div class="wrap" id="adminContent" style="display:none;">
+  <header class="top">
+    <div class="logo">
+      <img src="assets/qalamify-icon.png" alt="Qalamify">
+      <span class="logo-word">Qalam<em>ify</em> <span style="font-weight:600;color:var(--slate);font-size:14px;">Admin</span></span>
+    </div>
+    <div class="right">
+      <span class="email-pill" id="userEmail"></span>
+      <a href="index.html" class="back">View site</a>
+      <button class="logout" id="logoutBtn">Log out</button>
+    </div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="settings">Contact Details</button>
+    <button class="tab-btn" data-tab="mentors">Mentors</button>
+    <button class="tab-btn" data-tab="registrations">Registrations</button>
+  </div>
+
+  <!-- ===================== SETTINGS TAB ===================== -->
+  <div class="tab-panel active" id="tab-settings">
+    <section class="panel">
+      <h2>Contact details</h2>
+      <div class="sub">Updates the email and phone number shown across the live site instantly.</div>
+      <div class="row2">
+        <div class="field">
+          <label for="setEmail">Contact email</label>
+          <input type="email" id="setEmail" placeholder="admin@qalamify.in">
+        </div>
+        <div class="field">
+          <label for="setPhone">Phone number</label>
+          <input type="text" id="setPhone" placeholder="838866546">
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="saveSettingsBtn">Save contact details</button>
+      </div>
+      <div class="msg" id="settingsMsg"></div>
+    </section>
+  </div>
+
+  <!-- ===================== MENTORS TAB ===================== -->
+  <div class="tab-panel" id="tab-mentors">
+    <section class="panel">
+      <h2>Mentors</h2>
+      <div class="sub">Add, edit, or remove mentor cards shown in the "Meet our mentors" section.</div>
+
+      <table class="list" id="mentorTable">
+        <thead><tr><th></th><th>Name</th><th>Role</th><th>Status</th><th></th></tr></thead>
+        <tbody id="mentorTableBody">
+          <tr><td colspan="5" class="empty-note">Loading mentors&hellip;</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="panel">
+      <h2 id="formTitle">Add / edit a mentor</h2>
+      <div class="sub">Click "Edit" in the table above to update an existing mentor, or fill this in to add a new one.</div>
+
+      <input type="hidden" id="mId" value="">
+
+      <div class="field">
+        <label for="mName">Full name <span style="color:var(--red)">*</span></label>
+        <input type="text" id="mName" placeholder="e.g. Anjali Rao">
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label for="mRole">Role / subject</label>
+          <input type="text" id="mRole" placeholder="e.g. CUET UG — General Test">
+        </div>
+        <div class="field">
+          <label for="mOrder">Display order</label>
+          <input type="number" id="mOrder" placeholder="1" min="0">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="mPhotoFile">Photo</label>
+        <div class="upload-row">
+          <img id="mPhotoPreview" src="" alt="" style="display:none;">
+          <input type="file" id="mPhotoFile" accept="image/*">
+        </div>
+        <div class="upload-progress" id="uploadStatus"></div>
+        <input type="hidden" id="mPhotoUrl" value="">
+        <div class="hint">Uploads directly to secure storage — no external links needed. Leave empty to show initials instead.</div>
+      </div>
+
+      <div class="field" style="max-width:200px;">
+        <label for="mActive">Status</label>
+        <select id="mActive">
+          <option value="true" selected>Active (visible on site)</option>
+          <option value="false">Inactive (hidden)</option>
+        </select>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" id="saveMentorBtn">Save mentor</button>
+        <button class="btn btn-secondary" id="clearMentorBtn" type="button">Clear form</button>
+      </div>
+      <div class="msg" id="mentorMsg"></div>
+    </section>
+  </div>
+
+  <!-- ===================== REGISTRATIONS TAB ===================== -->
+  <div class="tab-panel" id="tab-registrations">
+    <section class="panel">
+      <h2>Admission registrations</h2>
+      <div class="sub">Everyone who has submitted the admission form, most recent first.</div>
+      <table class="list" id="regTable">
+        <thead><tr><th>Name</th><th>Phone</th><th>Program</th><th>Submitted</th></tr></thead>
+        <tbody id="regTableBody">
+          <tr><td colspan="4" class="empty-note">Loading&hellip;</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="assets/config.js"></script>
+<script>
+  const sbClient = supabase.createClient(QALAMIFY_CONFIG.SUPABASE_URL, QALAMIFY_CONFIG.SUPABASE_ANON_KEY);
+
+  // ---------------- Login gate ----------------
+  const gate = document.getElementById('gate');
+  const adminContent = document.getElementById('adminContent');
+
+  async function tryLogin() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const btn = document.getElementById('loginBtn');
+    const errEl = document.getElementById('gateErr');
+    errEl.textContent = '';
+    btn.disabled = true;
+    btn.textContent = 'Signing in...';
+
+    const { data, error } = await sbClient.auth.signInWithPassword({ email, password });
+
+    btn.disabled = false;
+    btn.textContent = 'Sign in';
+
+    if (error) {
+      errEl.textContent = error.message;
+      return;
+    }
+    enterAdmin(data.session.user.email);
+  }
+
+  function enterAdmin(email) {
+    gate.style.display = 'none';
+    adminContent.style.display = 'block';
+    document.getElementById('userEmail').textContent = email;
+    init();
+  }
+
+  document.getElementById('loginBtn').addEventListener('click', tryLogin);
+  document.getElementById('loginPassword').addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    await sbClient.auth.signOut();
+    location.reload();
+  });
+
+  // On load, check if already signed in (session persists across visits)
+  (async () => {
+    const { data } = await sbClient.auth.getSession();
+    if (data.session) enterAdmin(data.session.user.email);
+  })();
+
+  // ---------------- Tabs ----------------
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  function showMsg(id, text, ok) {
+    const el = document.getElementById(id);
+    el.textContent = text;
+    el.className = 'msg show ' + (ok ? 'ok' : 'err');
+  }
+
+  // ---------------- Settings ----------------
+  async function loadSettingsIntoForm() {
+    const { data, error } = await sbClient.from('site_settings').select('*');
+    if (error || !data) return;
+    data.forEach(r => {
+      if (r.key === 'email') document.getElementById('setEmail').value = r.value || '';
+      if (r.key === 'phone') document.getElementById('setPhone').value = r.value || '';
+    });
+  }
+
+  document.getElementById('saveSettingsBtn').addEventListener('click', async () => {
+    const email = document.getElementById('setEmail').value.trim();
+    const phone = document.getElementById('setPhone').value.trim();
+    if (!email && !phone) { showMsg('settingsMsg', 'Enter an email or phone number first.', false); return; }
+
+    const { error } = await sbClient.from('site_settings').upsert([
+      { key: 'email', value: email },
+      { key: 'phone', value: phone }
+    ]);
+    showMsg('settingsMsg', error ? 'Something went wrong.' : 'Saved — live on the site now.', !error);
+  });
+
+  // ---------------- Mentors ----------------
+  let mentorCache = [];
+
+  async function loadMentorTable() {
+    const body = document.getElementById('mentorTableBody');
+    const { data, error } = await sbClient.from('mentors').select('*').order('display_order', { ascending: true });
+    if (error) {
+      body.innerHTML = '<tr><td colspan="5" class="empty-note">Couldn\'t load mentors — check your Supabase setup.</td></tr>';
+      return;
+    }
+    mentorCache = data || [];
+    if (mentorCache.length === 0) {
+      body.innerHTML = '<tr><td colspan="5" class="empty-note">No mentors added yet — use the form below.</td></tr>';
+      return;
+    }
+    body.innerHTML = mentorCache.map((m, i) => {
+      const thumb = m.photo_url
+        ? `<img class="thumb" src="${m.photo_url}" alt="">`
+        : `<div class="thumb-fallback">${String(m.name).trim().split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase()}</div>`;
+      return `
+        <tr>
+          <td>${thumb}</td>
+          <td>${m.name}</td>
+          <td>${m.role || ''}</td>
+          <td><span class="pill ${m.active ? 'active' : 'inactive'}">${m.active ? 'Active' : 'Inactive'}</span></td>
+          <td>
+            <div class="btn-row">
+              <button class="link-btn" onclick="editMentor(${i})">Edit</button>
+              <button class="link-btn danger" onclick="deleteMentor(${i})">Delete</button>
+            </div>
+          </td>
+        </tr>`;
+    }).join('');
+  }
+
+  function editMentor(i) {
+    const m = mentorCache[i];
+    document.getElementById('mId').value = m.id;
+    document.getElementById('mName').value = m.name || '';
+    document.getElementById('mRole').value = m.role || '';
+    document.getElementById('mOrder').value = m.display_order ?? '';
+    document.getElementById('mPhotoUrl').value = m.photo_url || '';
+    document.getElementById('mActive').value = m.active ? 'true' : 'false';
+    const preview = document.getElementById('mPhotoPreview');
+    if (m.photo_url) { preview.src = m.photo_url; preview.style.display = 'block'; }
+    else { preview.style.display = 'none'; }
+    document.getElementById('formTitle').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  async function deleteMentor(i) {
+    const m = mentorCache[i];
+    if (!confirm(`Remove ${m.name} from the site?`)) return;
+    const { error } = await sbClient.from('mentors').delete().eq('id', m.id);
+    showMsg('mentorMsg', error ? 'Something went wrong.' : `${m.name} removed.`, !error);
+    loadMentorTable();
+  }
+
+  document.getElementById('clearMentorBtn').addEventListener('click', () => {
+    document.getElementById('mId').value = '';
+    ['mName','mRole','mOrder','mPhotoUrl'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('mActive').value = 'true';
+    document.getElementById('mPhotoPreview').style.display = 'none';
+    document.getElementById('mPhotoFile').value = '';
+  });
+
+  // Real file upload straight to Supabase Storage
+  document.getElementById('mPhotoFile').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const status = document.getElementById('uploadStatus');
+    status.textContent = 'Uploading...';
+    const path = `mentors/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+    const { error } = await sbClient.storage.from('media').upload(path, file);
+    if (error) {
+      status.textContent = 'Upload failed: ' + error.message;
+      return;
+    }
+    const { data } = sbClient.storage.from('media').getPublicUrl(path);
+    document.getElementById('mPhotoUrl').value = data.publicUrl;
+    const preview = document.getElementById('mPhotoPreview');
+    preview.src = data.publicUrl;
+    preview.style.display = 'block';
+    status.textContent = 'Uploaded.';
+  });
+
+  document.getElementById('saveMentorBtn').addEventListener('click', async () => {
+    const name = document.getElementById('mName').value.trim();
+    if (!name) { showMsg('mentorMsg', 'Name is required.', false); return; }
+
+    const id = document.getElementById('mId').value;
+    const row = {
+      name,
+      role: document.getElementById('mRole').value.trim(),
+      display_order: Number(document.getElementById('mOrder').value) || 0,
+      photo_url: document.getElementById('mPhotoUrl').value.trim() || null,
+      active: document.getElementById('mActive').value === 'true'
+    };
+
+    const { error } = id
+      ? await sbClient.from('mentors').update(row).eq('id', id)
+      : await sbClient.from('mentors').insert(row);
+
+    showMsg('mentorMsg', error ? 'Something went wrong.' : `Saved ${name}.`, !error);
+    if (!error) document.getElementById('clearMentorBtn').click();
+    loadMentorTable();
+  });
+
+  // ---------------- Registrations ----------------
+  async function loadRegistrations() {
+    const body = document.getElementById('regTableBody');
+    const { data, error } = await sbClient.from('registrations').select('*').order('created_at', { ascending: false });
+    if (error) {
+      body.innerHTML = '<tr><td colspan="4" class="empty-note">Couldn\'t load registrations.</td></tr>';
+      return;
+    }
+    if (!data || data.length === 0) {
+      body.innerHTML = '<tr><td colspan="4" class="empty-note">No registrations yet.</td></tr>';
+      return;
+    }
+    body.innerHTML = data.map(r => `
+      <tr>
+        <td>${r.full_name || ''}</td>
+        <td>${r.phone || ''}</td>
+        <td>${r.program || ''}</td>
+        <td>${new Date(r.created_at).toLocaleDateString()}</td>
+      </tr>`).join('');
+  }
+
+  // ---------------- Init ----------------
+  function init() {
+    loadSettingsIntoForm();
+    loadMentorTable();
+    loadRegistrations();
+  }
+</script>
+
+</body>
+</html>

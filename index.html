@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qalamify — CUET, NMMS &amp; NET Coaching</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#C11A21;
+    --red-deep:#8F1319;
+    --gold:#C1982D;
+    --gold-soft:#E7CE8E;
+    --grey:#C8C8C8;
+    --grey-soft:#F1EFEC;
+    --ink:#221F1D;
+    --slate:#6B6663;
+    --paper:#FFFFFF;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{font-family:'Poppins',sans-serif;font-weight:700;margin:0;letter-spacing:-0.01em;}
+  a{text-decoration:none;color:inherit;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+  :focus-visible{outline:2px solid var(--red);outline-offset:3px;}
+  .eyebrow{
+    font-family:'Poppins',sans-serif;font-size:12.5px;font-weight:700;
+    letter-spacing:0.1em;text-transform:uppercase;color:var(--red);
+  }
+
+  /* ---------- LOGO ---------- */
+  .logo{display:flex;align-items:center;gap:10px;}
+  .logo svg{width:34px;height:34px;flex-shrink:0;}
+  .logo-word{font-family:'Poppins',sans-serif;font-weight:800;font-size:21px;color:var(--ink);}
+  .logo-word em{font-style:normal;color:var(--red);}
+
+  /* ---------- OFFER STRIP ---------- */
+  .strip{
+    background:var(--ink);color:var(--paper);text-align:center;
+    padding:10px 16px;font-size:13.5px;font-weight:500;
+  }
+  .strip b{color:var(--gold-soft);}
+
+  /* ---------- NAV ---------- */
+  .nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,0.92);backdrop-filter:blur(8px);border-bottom:1px solid #EEE9E3;}
+  .nav-row{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;max-width:1180px;margin:0 auto;}
+  .nav-links{display:flex;gap:30px;font-size:14.5px;font-weight:600;}
+  .nav-links a{opacity:0.75;transition:opacity .2s,color .2s;}
+  .nav-links a:hover{opacity:1;color:var(--red);}
+  .nav-cta{
+    background:var(--red);color:var(--paper);padding:11px 20px;border-radius:8px;
+    font-size:13.5px;font-weight:700;transition:background .2s,transform .15s;
+  }
+  .nav-cta:hover{background:var(--red-deep);transform:translateY(-1px);}
+  @media(max-width:920px){.nav-links{display:none;}}
+
+  /* ---------- HERO ---------- */
+  .hero-outer{position:relative;overflow:hidden;}
+  .blob{position:absolute;border-radius:50%;filter:blur(2px);z-index:0;pointer-events:none;}
+  .blob-1{width:420px;height:420px;background:radial-gradient(circle,rgba(193,26,33,0.10),transparent 70%);top:-120px;right:-100px;}
+  .blob-2{width:340px;height:340px;background:radial-gradient(circle,rgba(193,152,45,0.16),transparent 70%);bottom:-140px;left:-80px;}
+  .hero{padding:64px 0 88px;display:grid;grid-template-columns:1.1fr 0.9fr;gap:52px;align-items:center;position:relative;z-index:1;}
+  .hero h1{font-size:clamp(32px,4.4vw,50px);line-height:1.1;margin-top:16px;}
+  .hero h1 em{font-style:normal;color:var(--red);}
+  .hero p.lede{margin-top:20px;font-size:16.5px;line-height:1.65;color:var(--slate);max-width:48ch;}
+  .hero-actions{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap;}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 24px;border-radius:8px;font-weight:700;font-size:14.5px;border:2px solid transparent;cursor:pointer;transition:transform .15s ease,background .2s,border-color .2s;}
+  .btn-primary{background:var(--red);color:var(--paper);}
+  .btn-primary:hover{background:var(--red-deep);transform:translateY(-1px);}
+  .btn-ghost{background:transparent;border-color:var(--ink);color:var(--ink);}
+  .btn-ghost:hover{border-color:var(--red);color:var(--red);}
+
+  .hero-art{position:relative;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;}
+  .hub{position:relative;width:100%;max-width:400px;aspect-ratio:1/1;}
+  .hub-core{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:220px;height:220px;border-radius:50%;
+    overflow:hidden;
+    border:6px solid var(--paper);
+    box-shadow:0 30px 60px -18px rgba(193,26,33,0.45),0 0 0 2px rgba(193,152,45,0.35);
+  }
+  .hub-core img{width:100%;height:100%;object-fit:cover;display:block;}
+  .hero-badge{
+    position:absolute;left:-8%;bottom:10%;background:var(--paper);
+    border-radius:12px;padding:12px 16px;box-shadow:0 20px 40px -18px rgba(34,31,29,0.35);
+    display:flex;align-items:center;gap:10px;z-index:2;
+  }
+  .hero-badge .badge-num{font-family:'Poppins',sans-serif;font-weight:800;font-size:20px;color:var(--red);}
+  .hero-badge .badge-label{font-size:11px;color:var(--slate);line-height:1.3;max-width:14ch;}
+  @media(max-width:560px){.hero-badge{left:0;bottom:-6%;}}
+  .hub-ring{position:absolute;inset:0;border:1.5px dashed var(--grey);border-radius:50%;}
+  .hub-tag{
+    position:absolute;background:var(--paper);border:1px solid #EEE9E3;
+    border-radius:10px;padding:10px 14px;font-family:'Poppins',sans-serif;
+    font-weight:700;font-size:13px;box-shadow:0 14px 30px -14px rgba(34,31,29,0.25);
+    display:flex;align-items:center;gap:8px;
+  }
+  .hub-tag i{width:8px;height:8px;border-radius:50%;background:var(--gold);display:inline-block;}
+  .tag-a{top:0%;left:12%;}
+  .tag-b{top:6%;right:-6%;}
+  .tag-c{bottom:6%;left:6%;}
+  .tag-d{bottom:0%;right:2%;}
+  .tag-e{top:42%;left:-12%;}
+  .tag-f{top:42%;right:-10%;}
+
+  /* ---------- STATS ---------- */
+  .stats{background:linear-gradient(120deg,var(--ink) 0%,#2E2A27 100%);padding:44px 0;}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center;}
+  .stat b{display:block;font-family:'Poppins',sans-serif;font-size:34px;color:var(--paper);}
+  .stat span{font-size:12.5px;color:rgba(255,255,255,0.6);letter-spacing:0.04em;text-transform:uppercase;}
+  @media(max-width:700px){.stats-grid{grid-template-columns:repeat(2,1fr);gap:30px;}}
+
+  /* ---------- SECTION HEADS ---------- */
+  section{padding:88px 0;}
+  .sec-head{max-width:640px;margin-bottom:48px;}
+  .sec-head.center{margin-left:auto;margin-right:auto;text-align:center;}
+  .sec-head h2{font-size:clamp(26px,3.2vw,36px);margin-top:12px;line-height:1.15;}
+  .sec-head p{color:var(--slate);margin-top:14px;font-size:16px;line-height:1.6;}
+
+  /* ---------- STAND OUT CARDS ---------- */
+  .standout-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+  .standout-card{
+    background:var(--paper);border:1px solid #EEE9E3;border-radius:var(--radius);padding:26px 22px;
+    opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;
+  }
+  .standout-card.in-view{opacity:1;transform:translateY(0);}
+  .standout-icon{
+    width:46px;height:46px;border-radius:10px;background:#FBEEEE;color:var(--red);
+    display:flex;align-items:center;justify-content:center;margin-bottom:16px;
+  }
+  .standout-icon svg{width:22px;height:22px;}
+  .standout-card h3{font-size:16px;margin-bottom:8px;}
+  .standout-card p{font-size:13.5px;color:var(--slate);line-height:1.6;margin:0;}
+  @media(max-width:920px){.standout-grid{grid-template-columns:1fr 1fr;}}
+  @media(max-width:560px){.standout-grid{grid-template-columns:1fr;}}
+
+  /* ---------- PROGRAMS ---------- */
+  .programs-band{background:var(--grey-soft);}
+  .prog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .prog-card{
+    background:var(--paper);border-radius:14px;overflow:hidden;border:1px solid #EEE9E3;
+    display:flex;flex-direction:column;position:relative;
+    opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .3s ease,box-shadow .3s ease,border-color .3s ease;
+  }
+  .prog-card.reveal:hover{transform:translateY(-6px);box-shadow:0 24px 50px -22px rgba(34,31,29,0.35);border-color:var(--red);}
+  .prog-card.in-view{opacity:1;}
+  .prog-ribbon{
+    position:absolute;top:18px;right:-38px;width:150px;text-align:center;
+    background:var(--gold);color:var(--ink);
+    font-family:'Poppins',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:0.04em;
+    padding:4px 0;transform:rotate(45deg);box-shadow:0 4px 10px rgba(0,0,0,0.15);z-index:2;
+  }
+  .prog-icon{
+    width:40px;height:40px;border-radius:10px;background:#FBEEEE;color:var(--red);
+    display:flex;align-items:center;justify-content:center;margin-bottom:14px;
+  }
+  .prog-icon svg{width:20px;height:20px;}
+  .prog-top{height:6px;background:linear-gradient(90deg,var(--red),var(--gold));}
+  .prog-body{padding:24px 22px;flex:1;display:flex;flex-direction:column;}
+  .prog-code{font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;color:var(--gold);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:10px;}
+  .prog-body h3{font-size:19px;margin-bottom:10px;}
+  .prog-body p{font-size:13.5px;color:var(--slate);line-height:1.6;margin:0 0 18px;flex:1;}
+  .prog-link{font-size:13px;font-weight:700;color:var(--red);display:inline-flex;align-items:center;gap:6px;}
+  .prog-link:hover{color:var(--red-deep);}
+  @media(max-width:920px){.prog-grid{grid-template-columns:1fr 1fr;}}
+  @media(max-width:560px){.prog-grid{grid-template-columns:1fr;}}
+
+  /* ---------- PROGRAM POSTERS (full images, never cropped) ---------- */
+  .poster-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;}
+  .poster-card{
+    background:var(--paper);border:1px solid #EEE9E3;border-radius:14px;overflow:hidden;
+    box-shadow:0 18px 40px -26px rgba(34,31,29,0.25);
+    opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;
+  }
+  .poster-card.in-view{opacity:1;transform:translateY(0);}
+  .poster-frame{
+    background:var(--grey-soft);
+    display:flex;align-items:center;justify-content:center;
+    height:280px;
+  }
+  .poster-frame img{
+    width:100%;height:100%;object-fit:contain;display:block;
+  }
+  @media(max-width:920px){.poster-grid{grid-template-columns:1fr;}.poster-frame{height:auto;}
+    .poster-frame img{width:100%;height:auto;object-fit:contain;}}
+  .poster-call{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:14px 18px;background:var(--ink);color:#fff;
+  }
+  .poster-call span{font-size:13px;color:rgba(255,255,255,0.7);}
+  .poster-call a{font-family:'Poppins',sans-serif;font-weight:700;font-size:14.5px;color:var(--gold-soft);}
+  .poster-call a:hover{color:#fff;}
+
+  .why-split{display:grid;grid-template-columns:0.9fr 1.1fr;gap:56px;align-items:center;}
+  .why-visual{
+    background:linear-gradient(160deg,var(--red) 0%,var(--red-deep) 100%);
+    border-radius:20px;aspect-ratio:4/5;position:relative;overflow:hidden;
+    display:flex;align-items:flex-end;padding:28px;
+  }
+  .why-visual::before{
+    content:'';position:absolute;top:-40px;right:-40px;width:220px;height:220px;
+    border-radius:50%;background:rgba(255,255,255,0.08);
+  }
+  .why-visual::after{
+    content:'';position:absolute;bottom:-60px;left:-30px;width:180px;height:180px;
+    border:1.5px dashed rgba(255,255,255,0.25);border-radius:50%;
+  }
+  .why-quote{color:var(--paper);position:relative;z-index:1;}
+  .why-quote .display{font-size:22px;line-height:1.35;}
+  .why-quote span{display:block;margin-top:14px;font-size:13px;color:var(--gold-soft);font-weight:600;}
+  .why-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:22px;}
+  .why-list li{display:flex;gap:16px;}
+  .why-num{
+    font-family:'Poppins',sans-serif;font-weight:800;font-size:14px;color:var(--red);
+    width:36px;height:36px;border-radius:50%;border:1.5px solid var(--red);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .why-list h3{font-size:16.5px;margin-bottom:5px;}
+  .why-list p{font-size:14px;color:var(--slate);margin:0;line-height:1.6;}
+  @media(max-width:920px){.why-split{grid-template-columns:1fr;}.why-visual{aspect-ratio:16/9;}}
+
+  /* ---------- MENTORS ---------- */
+  .mentor-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+  .mentor-card{text-align:center;}
+  .mentor-avatar{
+    width:100%;aspect-ratio:1/1;border-radius:16px;
+    background:linear-gradient(150deg,var(--grey-soft),#E7E2DB);
+    display:flex;align-items:center;justify-content:center;margin-bottom:16px;
+    font-family:'Poppins',sans-serif;font-weight:800;font-size:32px;color:var(--red);
+    border:1px solid #EEE9E3;
+  }
+  .mentor-card h3{font-size:15.5px;margin-bottom:4px;}
+  .mentor-card span{font-size:12.5px;color:var(--slate);}
+  @media(max-width:920px){.mentor-grid{grid-template-columns:1fr 1fr;}}
+
+  /* ---------- TESTIMONIALS ---------- */
+  .testi-band{background:var(--ink);}
+  .testi-band .eyebrow{color:var(--gold-soft);}
+  .testi-band .sec-head p{color:rgba(255,255,255,0.62);}
+  .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .testi-card{background:#2E2A27;border-radius:var(--radius);padding:26px 22px;border:1px solid rgba(255,255,255,0.08);transition:transform .25s ease,border-color .25s ease;}
+  .testi-card:hover{transform:translateY(-4px);border-color:rgba(231,206,142,0.4);}
+  .testi-quote{color:var(--gold-soft);opacity:0.6;margin-bottom:10px;}
+  .testi-quote svg{width:26px;height:26px;}
+  .testi-stars{color:var(--gold-soft);font-size:14px;letter-spacing:2px;margin-bottom:14px;}
+  .testi-card p{font-size:14.5px;color:rgba(255,255,255,0.82);line-height:1.65;margin:0 0 18px;}
+  .testi-who{display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.6);font-weight:600;}
+  .testi-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);}
+  @media(max-width:920px){.testi-grid{grid-template-columns:1fr;}}
+
+  /* ---------- BATCHES ---------- */
+  .batch-table{width:100%;border-collapse:collapse;font-size:14.5px;}
+  .batch-table th{text-align:left;font-family:'Poppins',sans-serif;font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--slate);padding:12px 16px;border-bottom:2px solid var(--ink);}
+  .batch-table td{padding:18px 16px;border-bottom:1px solid #EEE9E3;}
+  .batch-table tr:hover td{background:#FBF6EC;}
+  .batch-name{font-weight:700;}
+  .batch-cta{font-size:13px;font-weight:700;color:var(--red);}
+  @media(max-width:560px){.batch-table{font-size:13px;}.batch-table th:nth-child(3),.batch-table td:nth-child(3){display:none;}}
+
+  /* ---------- CTA BAND ---------- */
+  .cta-band{background:linear-gradient(120deg,var(--red) 0%,var(--red-deep) 100%);color:var(--paper);text-align:center;padding:78px 0;position:relative;overflow:hidden;}
+  .cta-band .blob{background:rgba(255,255,255,0.08);}
+  .cta-band .blob-1{top:-160px;right:-120px;}
+  .cta-band .blob-2{bottom:-160px;left:-100px;}
+  .cta-band h2{font-size:clamp(26px,3.6vw,40px);max-width:22ch;margin:0 auto 18px;}
+  .cta-band p{color:rgba(255,255,255,0.82);max-width:52ch;margin:0 auto 30px;font-size:16px;}
+  .cta-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+  .cta-band .btn-primary{background:var(--gold);color:var(--ink);}
+  .cta-band .btn-primary:hover{background:var(--gold-soft);}
+  .cta-band .btn-ghost{border-color:rgba(255,255,255,0.6);color:var(--paper);}
+  .cta-band .btn-ghost:hover{background:var(--paper);color:var(--red);border-color:var(--paper);}
+
+  /* ---------- FOOTER ---------- */
+  footer{background:#171412;color:rgba(255,255,255,0.68);padding:56px 0 26px;}
+  .foot-grid{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:36px;margin-bottom:40px;}
+  .foot-grid p{font-size:13.5px;line-height:1.7;max-width:32ch;margin-top:14px;}
+  .foot-col h4{font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--gold-soft);margin-bottom:14px;}
+  .foot-col a{display:block;font-size:13.5px;padding:5px 0;opacity:0.85;}
+  .foot-col a:hover{opacity:1;color:var(--gold-soft);}
+  .foot-bottom{border-top:1px solid rgba(255,255,255,0.12);padding-top:22px;display:flex;justify-content:space-between;font-size:12.5px;color:rgba(255,255,255,0.45);flex-wrap:wrap;gap:10px;}
+  @media(max-width:920px){.foot-grid{grid-template-columns:1fr 1fr;}}
+  @media(max-width:560px){.foot-grid{grid-template-columns:1fr;}}
+
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;}
+  .reveal.in-view{opacity:1;transform:translateY(0);}
+
+  /* ---------- FLOATING CALL BUTTON ---------- */
+  .float-call{
+    position:fixed;bottom:22px;right:22px;z-index:60;
+    width:58px;height:58px;border-radius:50%;background:var(--red);color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 14px 30px -10px rgba(193,26,33,0.6);
+  }
+  .float-call svg{width:26px;height:26px;}
+  .float-call::before{
+    content:'';position:absolute;inset:0;border-radius:50%;background:var(--red);
+    animation:pulse-ring 2.2s cubic-bezier(0.4,0,0.6,1) infinite;z-index:-1;
+  }
+  @keyframes pulse-ring{0%{transform:scale(1);opacity:0.55;}100%{transform:scale(1.9);opacity:0;}}
+  @media(prefers-reduced-motion: reduce){.float-call::before{animation:none;}}
+
+  @media(prefers-reduced-motion: reduce){*{transition:none !important;scroll-behavior:auto !important;}}
+</style>
+</head>
+<body>
+
+<div class="strip">Admissions open for the 2026&ndash;27 session &mdash; <b>book a free counselling call</b> before seats fill up.</div>
+
+<nav class="nav">
+  <div class="nav-row">
+    <a href="#top" class="logo">
+      <img src="assets/qalamify-icon.png" alt="Qalamify" width="34" height="34">
+      <span class="logo-word">Qalam<em>ify</em></span>
+    </a>
+    <div class="nav-links">
+      <a href="#programs">Programs</a>
+      <a href="#why">Why Us</a>
+      <a href="#batches">Batches</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a href="registration.html" target="_blank" class="nav-cta">Start Admission</a>
+  </div>
+</nav>
+
+<main id="top">
+  <div class="hero-outer">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="wrap hero">
+    <div class="hero-copy">
+      <span class="eyebrow">CUET · NMMS · UGC NET · NCET · GATE Coaching</span>
+      <h1>Turn exam day into <em>your day.</em></h1>
+      <p class="lede">Qalamify is a coaching program built around six high-stakes exams: CUET UG, CUET PG, NMMS, UGC NET, NCET, and GATE. Structured lessons, weekly mock tests, and mentors who've cleared the very exam they teach.</p>
+      <div class="hero-actions">
+        <a href="registration.html" target="_blank" class="btn btn-primary">Start Admission</a>
+        <a href="#programs" class="btn btn-ghost">Explore programs</a>
+      </div>
+    </div>
+
+    <div class="hero-art">
+      <div class="hub">
+        <div class="hub-ring"></div>
+        <div class="hub-core">
+          <img src="assets/hero-team.jpg" alt="The Qalamify coaching team">
+        </div>
+        <div class="hero-badge"><span class="badge-num">6</span><span class="badge-label">exam tracks, one team</span></div>
+        <div class="hub-tag tag-a"><i></i>CUET UG</div>
+        <div class="hub-tag tag-b"><i></i>CUET PG</div>
+        <div class="hub-tag tag-c"><i></i>NMMS</div>
+        <div class="hub-tag tag-d"><i></i>UGC NET</div>
+        <div class="hub-tag tag-e"><i></i>NCET</div>
+        <div class="hub-tag tag-f"><i></i>GATE</div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div class="stats">
+    <div class="wrap stats-grid">
+      <div class="stat"><b class="counter" data-target="6">0</b><span>Exam tracks</span></div>
+      <div class="stat"><b class="counter" data-target="120">0</b><span>Mock tests / year</span></div>
+      <div class="stat"><b class="counter" data-target="48">0</b><span>Hr doubt turnaround</span></div>
+      <div class="stat"><b class="counter" data-target="7">0</b><span>Days a week support</span></div>
+    </div>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <div class="sec-head center">
+        <span class="eyebrow">What makes us stand out</span>
+        <h2>Coaching built for one thing: your result.</h2>
+      </div>
+      <div class="standout-grid">
+        <div class="standout-card reveal">
+          <div class="standout-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 3 7v6c0 5 4 9 9 9s9-4 9-9V7z"/></svg></div>
+          <h3>Guided, not generic</h3>
+          <p>A study map built from your diagnostic test, not a one-size syllabus everyone gets.</p>
+        </div>
+        <div class="standout-card reveal">
+          <div class="standout-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14"/><path d="M4 19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2M8 7h8M8 11h8"/></svg></div>
+          <h3>Real exam-pattern mocks</h3>
+          <p>Timed, full-length papers on the actual exam pattern &mdash; scored within 48 hours.</p>
+        </div>
+        <div class="standout-card reveal">
+          <div class="standout-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg></div>
+          <h3>Faculty who've cleared it</h3>
+          <p>Every mentor has actually sat for and cleared the exam they now teach.</p>
+        </div>
+        <div class="standout-card reveal">
+          <div class="standout-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+          <h3>Deadlines tracked for you</h3>
+          <p>From NMMS scholarship forms to NET application windows &mdash; nothing gets missed.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="programs-band" id="programs">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Programs</span>
+        <h2>Four exams, four tracks &mdash; one coaching desk.</h2>
+        <p>Pick the exam you're sitting for. Each track has its own syllabus map, test cycle, and faculty.</p>
+      </div>
+      <div class="prog-grid">
+        <div class="prog-card reveal">
+          <div class="prog-ribbon">Popular</div>
+          <div class="prog-top"></div>
+          <div class="prog-body">
+            <div class="prog-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1.1 2.7 2 6 2s6-.9 6-2v-5"/></svg></div>
+            <span class="prog-code">Undergraduate</span>
+            <h3>CUET UG</h3>
+            <p>Domain-subject coaching plus General Test and Language paper drills for central university admissions.</p>
+            <a href="registration.html" target="_blank" class="prog-link">Apply now &rarr;</a>
+          </div>
+        </div>
+        <div class="prog-card reveal">
+          <div class="prog-top"></div>
+          <div class="prog-body">
+            <div class="prog-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M4 8h16M4 16h16"/></svg></div>
+            <span class="prog-code">Postgraduate</span>
+            <h3>CUET PG</h3>
+            <p>Subject-specific problem sets and previous-year paper analysis for MA/MSc/MCom admissions.</p>
+            <a href="registration.html" target="_blank" class="prog-link">Apply now &rarr;</a>
+          </div>
+        </div>
+        <div class="prog-card reveal">
+          <div class="prog-top"></div>
+          <div class="prog-body">
+            <div class="prog-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 3 7v6c0 5 4 9 9 9s9-4 9-9V7z"/></svg></div>
+            <span class="prog-code">Scholarship</span>
+            <h3>NMMS</h3>
+            <p>Mental Ability &amp; Scholastic Aptitude coaching, plus full help with the scholarship application.</p>
+            <a href="registration.html" target="_blank" class="prog-link">Apply now &rarr;</a>
+          </div>
+        </div>
+        <div class="prog-card reveal">
+          <div class="prog-top"></div>
+          <div class="prog-body">
+            <div class="prog-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg></div>
+            <span class="prog-code">Lectureship / JRF</span>
+            <h3>UGC NET</h3>
+            <p>Paper 1 teaching aptitude plus subject-paper coaching for the assistant professor and JRF cut-offs.</p>
+            <a href="registration.html" target="_blank" class="prog-link">Apply now &rarr;</a>
+          </div>
+        </div>
+        <div class="prog-card reveal">
+          <div class="prog-top"></div>
+          <div class="prog-body">
+            <div class="prog-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+            <span class="prog-code">Teacher Education</span>
+            <h3>NCET</h3>
+            <p>Common entrance test coaching for the 4-year Integrated Teacher Education Programme (ITEP) — general aptitude, teaching aptitude, and domain subjects.</p>
+            <a href="registration.html" target="_blank" class="prog-link">Apply now &rarr;</a>
+          </div>
+        </div>
+        <div class="prog-card reveal">
+          <div class="prog-top"></div>
+          <div class="prog-body">
+            <div class="prog-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg></div>
+            <span class="prog-code">PG Engineering / PSU</span>
+            <h3>GATE</h3>
+            <p>Subject-wise concept building, previous-year problem sets, and full-length mocks for GATE-based M.Tech admissions and PSU recruitment.</p>
+            <a href="registration.html" target="_blank" class="prog-link">Apply now &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="posters">
+    <div class="wrap">
+      <div class="sec-head center">
+        <span class="eyebrow">Program Posters</span>
+        <h2>See the team behind each track.</h2>
+        <p>Full, uncropped campaign visuals for each program &mdash; shown exactly as designed.</p>
+      </div>
+      <div class="poster-grid">
+        <div class="poster-card reveal">
+          <div class="poster-frame"><img src="assets/posters/cuet-pg.png" alt="Qalamify — Head of CUET Coaching team"></div>
+          <div class="poster-call"><span>CUET admissions</span><a href="tel:+918086307444">80863 07444</a></div>
+        </div>
+        <div class="poster-card reveal">
+          <div class="poster-frame"><img src="assets/posters/ugc-net.png" alt="Qalamify UGC NET Coaching — Learn from the Experts"></div>
+          <div class="poster-call"><span>UGC NET admissions</span><a href="tel:+918086307444">80863 07444</a></div>
+        </div>
+        <div class="poster-card reveal">
+          <div class="poster-frame"><img src="assets/posters/ncet.png" alt="Qalamify NCET Coaching — Head of NCET Coaching"></div>
+          <div class="poster-call"><span>NCET admissions</span><a href="tel:+918086307333">80863 07333</a></div>
+        </div>
+        <div class="poster-card reveal">
+          <div class="poster-frame"><img src="assets/posters/gate.png" alt="Qalamify GATE Coaching — Learn from the Experts"></div>
+          <div class="poster-call"><span>GATE admissions</span><a href="tel:+918086307222">80863 07222</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="why">
+    <div class="wrap why-split">
+      <div class="why-visual">
+        <div class="why-quote">
+          <p class="display">"The plan told me exactly what to study each week &mdash; I never had to guess."</p>
+          <span>&mdash; Illustrative student feedback</span>
+        </div>
+      </div>
+      <div>
+        <span class="eyebrow">Why Qalamify</span>
+        <h2 style="margin-top:12px;font-size:clamp(24px,3vw,32px);">Coaching that runs on evidence, not slogans.</h2>
+        <ul class="why-list" style="margin-top:28px;">
+          <li><span class="why-num">1</span><div><h3>Diagnostic before day one</h3><p>A short baseline test tells us exactly where you stand before your plan is built.</p></div></li>
+          <li><span class="why-num">2</span><div><h3>Small-group doubt sessions</h3><p>No batch is bigger than what a mentor can actually track and follow up with.</p></div></li>
+          <li><span class="why-num">3</span><div><h3>Mock cycle with real feedback</h3><p>Section-wise and rank-wise breakdowns after every mock, not just a raw score.</p></div></li>
+          <li><span class="why-num">4</span><div><h3>Support through results season</h3><p>We stay on through counselling, university choice-filling, and scholarship filing.</p></div></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="testi-band">
+    <div class="wrap">
+      <div class="sec-head center">
+        <span class="eyebrow">Our students</span>
+        <h2>What aspirants say about the coaching cycle.</h2>
+        <p>Illustrative example quotes &mdash; replace with verified student testimonials before publishing.</p>
+      </div>
+      <div class="testi-grid">
+        <div class="testi-card">
+          <div class="testi-quote"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.5 3C6.5 4.5 4 8 4 12c0 3 2 5 4.5 5S13 15 13 12.5C13 10 11 8.5 9 8.5c-.3 0-.6 0-.8.1C8.7 6 10 4 12 3l-2.5 0zm10 0C16.5 4.5 14 8 14 12c0 3 2 5 4.5 5S23 15 23 12.5c0-2.5-2-4-4-4-.3 0-.6 0-.8.1.5-2.6 1.8-4.6 3.8-5.6L19.5 3z"/></svg></div>
+          <div class="testi-stars">★★★★★</div>
+          <p>The mock tests felt exactly like the real CUET paper. By the third one, the exam hall didn't feel new anymore.</p>
+          <div class="testi-who"><span class="testi-dot"></span>CUET UG aspirant</div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-quote"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.5 3C6.5 4.5 4 8 4 12c0 3 2 5 4.5 5S13 15 13 12.5C13 10 11 8.5 9 8.5c-.3 0-.6 0-.8.1C8.7 6 10 4 12 3l-2.5 0zm10 0C16.5 4.5 14 8 14 12c0 3 2 5 4.5 5S23 15 23 12.5c0-2.5-2-4-4-4-.3 0-.6 0-.8.1.5-2.6 1.8-4.6 3.8-5.6L19.5 3z"/></svg></div>
+          <div class="testi-stars">★★★★★</div>
+          <p>I'd failed NET once before. The second attempt plan was completely different &mdash; and it worked.</p>
+          <div class="testi-who"><span class="testi-dot"></span>UGC NET candidate</div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-quote"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.5 3C6.5 4.5 4 8 4 12c0 3 2 5 4.5 5S13 15 13 12.5C13 10 11 8.5 9 8.5c-.3 0-.6 0-.8.1C8.7 6 10 4 12 3l-2.5 0zm10 0C16.5 4.5 14 8 14 12c0 3 2 5 4.5 5S23 15 23 12.5c0-2.5-2-4-4-4-.3 0-.6 0-.8.1.5-2.6 1.8-4.6 3.8-5.6L19.5 3z"/></svg></div>
+          <div class="testi-stars">★★★★★</div>
+          <p>They handled the NMMS scholarship paperwork for us too &mdash; one less thing to worry about.</p>
+          <div class="testi-who"><span class="testi-dot"></span>NMMS parent</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="batches">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Batches</span>
+        <h2>Find a slot that fits your week.</h2>
+      </div>
+      <table class="batch-table">
+        <thead><tr><th>Track</th><th>Schedule</th><th>Mode</th><th>Next intake</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="batch-name">CUET UG</td><td>Mon&ndash;Fri, evening</td><td>Online &amp; in-centre</td><td>Rolling admission</td><td><a href="registration.html" target="_blank" class="batch-cta">Enquire &rarr;</a></td></tr>
+          <tr><td class="batch-name">CUET PG</td><td>Tue / Thu / Sat</td><td>Online</td><td>Rolling admission</td><td><a href="registration.html" target="_blank" class="batch-cta">Enquire &rarr;</a></td></tr>
+          <tr><td class="batch-name">NMMS</td><td>Weekends</td><td>In-centre</td><td>Next batch monthly</td><td><a href="registration.html" target="_blank" class="batch-cta">Enquire &rarr;</a></td></tr>
+          <tr><td class="batch-name">UGC NET</td><td>Mon&ndash;Sat, flexible</td><td>Online &amp; in-centre</td><td>Rolling admission</td><td><a href="registration.html" target="_blank" class="batch-cta">Enquire &rarr;</a></td></tr>
+          <tr><td class="batch-name">NCET</td><td>Weekday &amp; weekend</td><td>Online &amp; in-centre</td><td>Rolling admission</td><td><a href="registration.html" target="_blank" class="batch-cta">Enquire &rarr;</a></td></tr>
+          <tr><td class="batch-name">GATE</td><td>Weekday &amp; weekend</td><td>Online &amp; in-centre</td><td>Rolling admission</td><td><a href="registration.html" target="_blank" class="batch-cta">Enquire &rarr;</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="cta-band" id="contact">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="wrap">
+      <span class="eyebrow" style="color:var(--gold-soft)">Ready when you are</span>
+      <h2>Your next attempt starts with one call.</h2>
+      <p>Free 20-minute counselling call &mdash; we'll map your exam, your timeline, and the right batch. No obligation.</p>
+      <div class="cta-actions">
+        <a href="registration.html" target="_blank" class="btn btn-primary">Start Admission</a>
+        <a href="tel:+918086307666" class="btn btn-ghost">Call us</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a href="#top" class="logo">
+          <img src="assets/qalamify-icon-white.png" alt="Qalamify" width="30" height="30">
+          <span class="logo-word" style="color:#fff;">Qalam<em>ify</em></span>
+        </a>
+        <p>Coaching for CUET UG, CUET PG, NMMS scholarship, and UGC NET &mdash; built around mock tests, mentorship, and deadlines that don't get missed.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Programs</h4>
+        <a href="#programs">CUET UG</a><a href="#programs">CUET PG</a><a href="#programs">NMMS</a><a href="#programs">UGC NET</a><a href="#programs">NCET</a><a href="#programs">GATE</a>
+      </div>
+      <div class="foot-col">
+        <h4>Explore</h4>
+        <a href="#why">Why Qalamify</a><a href="#batches">Batches</a>
+      </div>
+      <div class="foot-col">
+        <h4>Contact</h4>
+        <a href="mailto:admin@qalamify.in" data-field="email">admin@qalamify.in</a>
+        <a href="tel:+918086307666" data-field="phone">80863 07666</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>&copy; 2026 Qalamify. All rights reserved.</span>
+      <span>Placeholder contact details &mdash; update before publishing.</span>
+    </div>
+  </div>
+</footer>
+
+<a href="tel:+918086307666" class="float-call" aria-label="Call Qalamify">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+</a>
+
+<script>
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in-view'); io.unobserve(e.target); } });
+  },{threshold:0.15});
+  document.querySelectorAll('.reveal, .standout-card, .prog-card').forEach(el=>io.observe(el));
+
+  const counters = document.querySelectorAll('.counter');
+  const cio = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting) return;
+      const el = e.target;
+      const target = parseInt(el.dataset.target,10);
+      const dur = 1200;
+      const start = performance.now();
+      function tick(now){
+        const p = Math.min((now-start)/dur,1);
+        el.textContent = Math.floor(p*target) + (p===1 && target>=10 ? '+' : '');
+        if(p<1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+      cio.unobserve(el);
+    });
+  },{threshold:0.6});
+  counters.forEach(el=>cio.observe(el));
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="assets/config.js"></script>
+<script src="assets/site.js"></script>
+<script>
+  applySiteSettings();
+</script>
+
+</body>
+</html>
