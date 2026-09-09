@@ -59,7 +59,16 @@
     font-size:13.5px;font-weight:700;transition:background .2s,transform .15s;
   }
   .nav-cta:hover{background:var(--red-deep);transform:translateY(-1px);}
-  @media(max-width:920px){.nav-links{display:none;}}
+  .nav-burger{display:none;background:none;border:none;cursor:pointer;padding:6px;flex-shrink:0;}
+  .nav-burger span{display:block;width:22px;height:2px;background:var(--ink);margin:5px 0;border-radius:2px;transition:transform .2s ease,opacity .2s ease;}
+  .nav-burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .nav-burger.open span:nth-child(2){opacity:0;}
+  .nav-burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+  .nav-mobile-panel{display:none;flex-direction:column;gap:2px;padding:8px 28px 18px;border-top:1px solid #EEE9E3;}
+  .nav-mobile-panel.open{display:flex;}
+  .nav-mobile-panel a{padding:11px 4px;font-size:15px;font-weight:600;color:var(--ink);border-bottom:1px solid #F1EFEC;}
+  .nav-mobile-panel a.nav-cta{margin-top:10px;text-align:center;border-bottom:none;color:var(--paper);}
+  @media(max-width:920px){.nav-links{display:none;}.nav-burger{display:block;}.nav-row .nav-cta{display:none;}}
 
   /* ---------- HERO ---------- */
   .hero-outer{position:relative;overflow:hidden;}
@@ -67,6 +76,15 @@
   .blob-1{width:420px;height:420px;background:radial-gradient(circle,rgba(193,26,33,0.10),transparent 70%);top:-120px;right:-100px;}
   .blob-2{width:340px;height:340px;background:radial-gradient(circle,rgba(193,152,45,0.16),transparent 70%);bottom:-140px;left:-80px;}
   .hero{padding:64px 0 88px;display:grid;grid-template-columns:1.1fr 0.9fr;gap:52px;align-items:center;position:relative;z-index:1;}
+  @media(max-width:920px){
+    .hero{grid-template-columns:1fr;padding:44px 0 64px;gap:44px;text-align:left;}
+    .hero-art{max-width:340px;margin:0 auto;}
+  }
+  @media(max-width:560px){
+    .hero{padding:32px 0 48px;gap:36px;}
+    .hero-art{max-width:270px;}
+    .hero h1{font-size:clamp(28px,7vw,38px);}
+  }
   .hero h1{font-size:clamp(32px,4.4vw,50px);line-height:1.1;margin-top:16px;}
   .hero h1 em{font-style:normal;color:var(--red);}
   .hero p.lede{margin-top:20px;font-size:16.5px;line-height:1.65;color:var(--slate);max-width:48ch;}
@@ -77,38 +95,43 @@
   .btn-ghost{background:transparent;border-color:var(--ink);color:var(--ink);}
   .btn-ghost:hover{border-color:var(--red);color:var(--red);}
 
-  .hero-art{position:relative;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;}
-  .hub{position:relative;width:100%;max-width:400px;aspect-ratio:1/1;}
-  .hub-core{
-    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-    width:220px;height:220px;border-radius:50%;
-    overflow:hidden;
-    border:6px solid var(--paper);
-    box-shadow:0 30px 60px -18px rgba(193,26,33,0.45),0 0 0 2px rgba(193,152,45,0.35);
+  .hero-art{position:relative;}
+  .hero-panel{
+    position:relative;border-radius:22px;overflow:hidden;
+    background:linear-gradient(150deg,var(--red) 0%,var(--red-deep) 65%,#6E1218 100%);
+    padding:32px 28px 28px;color:var(--paper);
+    box-shadow:0 40px 70px -30px rgba(193,26,33,0.5);
   }
-  .hub-core img{width:100%;height:100%;object-fit:cover;display:block;}
-  .hero-badge{
-    position:absolute;left:-8%;bottom:10%;background:var(--paper);
-    border-radius:12px;padding:12px 16px;box-shadow:0 20px 40px -18px rgba(34,31,29,0.35);
-    display:flex;align-items:center;gap:10px;z-index:2;
+  .hero-panel::before{
+    content:'';position:absolute;inset:0;opacity:0.12;pointer-events:none;
+    background-image:radial-gradient(rgba(255,255,255,0.9) 1.5px,transparent 1.5px);
+    background-size:18px 18px;
   }
-  .hero-badge .badge-num{font-family:'Poppins',sans-serif;font-weight:800;font-size:20px;color:var(--red);}
-  .hero-badge .badge-label{font-size:11px;color:var(--slate);line-height:1.3;max-width:14ch;}
-  @media(max-width:560px){.hero-badge{left:0;bottom:-6%;}}
-  .hub-ring{position:absolute;inset:0;border:1.5px dashed var(--grey);border-radius:50%;}
-  .hub-tag{
-    position:absolute;background:var(--paper);border:1px solid #EEE9E3;
-    border-radius:10px;padding:10px 14px;font-family:'Poppins',sans-serif;
-    font-weight:700;font-size:13px;box-shadow:0 14px 30px -14px rgba(34,31,29,0.25);
-    display:flex;align-items:center;gap:8px;
+  .hero-panel::after{
+    content:'';position:absolute;width:220px;height:220px;border-radius:50%;
+    background:rgba(231,206,142,0.18);top:-90px;right:-70px;pointer-events:none;
   }
-  .hub-tag i{width:8px;height:8px;border-radius:50%;background:var(--gold);display:inline-block;}
-  .tag-a{top:0%;left:12%;}
-  .tag-b{top:6%;right:-6%;}
-  .tag-c{bottom:6%;left:6%;}
-  .tag-d{bottom:0%;right:2%;}
-  .tag-e{top:42%;left:-12%;}
-  .tag-f{top:42%;right:-10%;}
+  .hero-panel-top{display:flex;align-items:center;gap:12px;position:relative;z-index:1;}
+  .hero-panel-top img{width:38px;height:38px;flex-shrink:0;}
+  .hero-online-badge{
+    font-family:'Poppins',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.03em;
+    background:rgba(255,255,255,0.16);border:1px solid rgba(255,255,255,0.3);
+    padding:6px 12px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;
+  }
+  .hero-online-badge i{width:7px;height:7px;border-radius:50%;background:#5FDD8F;display:inline-block;}
+  .hero-panel h3{position:relative;z-index:1;font-size:21px;margin-top:18px;line-height:1.3;}
+  .hero-chip-grid{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px;}
+  .hero-chip{
+    background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);
+    border-radius:10px;padding:11px 12px;font-family:'Poppins',sans-serif;font-weight:600;font-size:13.5px;
+    display:flex;align-items:center;gap:9px;
+  }
+  .hero-chip i{width:7px;height:7px;border-radius:50%;background:var(--gold-soft);display:inline-block;flex-shrink:0;}
+  .hero-panel-foot{position:relative;z-index:1;display:flex;gap:26px;margin-top:22px;padding-top:18px;border-top:1px solid rgba(255,255,255,0.18);}
+  .hero-panel-foot b{display:block;font-family:'Poppins',sans-serif;font-size:20px;}
+  .hero-panel-foot span{font-size:11px;color:rgba(255,255,255,0.7);}
+  @media(max-width:920px){.hero-art{max-width:400px;margin:0 auto;}}
+  @media(max-width:560px){.hero-chip-grid{grid-template-columns:1fr 1fr;}.hero-panel{padding:26px 20px 22px;}}
 
   /* ---------- STATS ---------- */
   .stats{background:linear-gradient(120deg,var(--ink) 0%,#2E2A27 100%);padding:44px 0;}
@@ -175,11 +198,14 @@
   /* ---------- PROGRAM POSTERS (full images, never cropped) ---------- */
   .poster-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;}
   .poster-card{
-    background:var(--paper);border:1px solid #EEE9E3;border-radius:14px;overflow:hidden;
+    background:var(--paper);border:1px solid #EEE9E3;border-radius:16px;overflow:hidden;
     box-shadow:0 18px 40px -26px rgba(34,31,29,0.25);
-    opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;
+    opacity:0;transform:translateY(16px);
+    transition:opacity .6s ease,transform .3s ease,box-shadow .3s ease;
   }
   .poster-card.in-view{opacity:1;transform:translateY(0);}
+  .poster-card:hover{transform:translateY(-5px);box-shadow:0 28px 55px -24px rgba(34,31,29,0.38);}
+  .poster-top-bar{height:5px;background:linear-gradient(90deg,var(--red),var(--gold));}
   .poster-frame{
     background:var(--grey-soft);
     display:flex;align-items:center;justify-content:center;
@@ -192,11 +218,37 @@
     .poster-frame img{width:100%;height:auto;object-fit:contain;}}
   .poster-call{
     display:flex;align-items:center;justify-content:space-between;gap:12px;
-    padding:14px 18px;background:var(--ink);color:#fff;
+    padding:15px 18px;background:var(--ink);color:#fff;
   }
-  .poster-call span{font-size:13px;color:rgba(255,255,255,0.7);}
-  .poster-call a{font-family:'Poppins',sans-serif;font-weight:700;font-size:14.5px;color:var(--gold-soft);}
+  .poster-call-label{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.75);}
+  .poster-call-label svg{width:15px;height:15px;color:var(--gold-soft);flex-shrink:0;}
+  .poster-call a{font-family:'Poppins',sans-serif;font-weight:700;font-size:14.5px;color:var(--gold-soft);white-space:nowrap;}
   .poster-call a:hover{color:#fff;}
+
+  /* ---------- CENTERS (online vs offline) ---------- */
+  .centers-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+  @media(max-width:800px){.centers-grid{grid-template-columns:1fr;}}
+  .center-card{
+    border-radius:16px;padding:32px 28px;position:relative;overflow:hidden;
+    opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;
+  }
+  .center-card.in-view{opacity:1;transform:translateY(0);}
+  .center-card.online{background:var(--ink);color:#fff;}
+  .center-card.offline{background:var(--paper);border:2px solid var(--red);}
+  .center-tag{
+    display:inline-flex;align-items:center;gap:6px;font-family:'Poppins',sans-serif;font-weight:700;
+    font-size:11px;letter-spacing:0.06em;text-transform:uppercase;padding:5px 12px;border-radius:20px;margin-bottom:16px;
+  }
+  .center-card.online .center-tag{background:rgba(231,206,142,0.15);color:var(--gold-soft);}
+  .center-card.offline .center-tag{background:#FBEEEE;color:var(--red);}
+  .center-card h3{font-size:22px;margin-bottom:10px;}
+  .center-card p{font-size:14.5px;line-height:1.65;margin:0 0 18px;}
+  .center-card.online p{color:rgba(255,255,255,0.72);}
+  .center-card.offline p{color:var(--slate);}
+  .center-meta{display:flex;align-items:flex-start;gap:10px;font-size:13.5px;font-weight:600;margin-bottom:22px;}
+  .center-meta svg{width:18px;height:18px;flex-shrink:0;margin-top:1px;}
+  .center-card.online .center-meta{color:rgba(255,255,255,0.85);}
+  .center-card.offline .center-meta{color:var(--ink);}
 
   .why-split{display:grid;grid-template-columns:0.9fr 1.1fr;gap:56px;align-items:center;}
   .why-visual{
@@ -321,10 +373,22 @@
     </a>
     <div class="nav-links">
       <a href="#programs">Programs</a>
+      <a href="#centers">Centres</a>
       <a href="#why">Why Us</a>
       <a href="#batches">Batches</a>
       <a href="#contact">Contact</a>
     </div>
+    <a href="registration.html" target="_blank" class="nav-cta">Start Admission</a>
+    <button class="nav-burger" id="navBurger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="nav-mobile-panel" id="navMobilePanel">
+    <a href="#programs">Programs</a>
+    <a href="#centers">Centres</a>
+    <a href="#why">Why Us</a>
+    <a href="#batches">Batches</a>
+    <a href="#contact">Contact</a>
     <a href="registration.html" target="_blank" class="nav-cta">Start Admission</a>
   </div>
 </nav>
@@ -337,7 +401,7 @@
     <div class="hero-copy">
       <span class="eyebrow">CUET · NMMS · UGC NET · NCET · GATE Coaching</span>
       <h1>Turn exam day into <em>your day.</em></h1>
-      <p class="lede">Qalamify is a coaching program built around six high-stakes exams: CUET UG, CUET PG, NMMS, UGC NET, NCET, and GATE. Structured lessons, weekly mock tests, and mentors who've cleared the very exam they teach.</p>
+      <p class="lede">Qalamify runs 100% online coaching for six high-stakes exams: CUET UG, CUET PG, NMMS, UGC NET, NCET, and GATE. Structured lessons, weekly mock tests, and mentors who've cleared the very exam they teach. We also run an offline tuition centre in Periya, Kasaragod for classes 8&ndash;12.</p>
       <div class="hero-actions">
         <a href="registration.html" target="_blank" class="btn btn-primary">Start Admission</a>
         <a href="#programs" class="btn btn-ghost">Explore programs</a>
@@ -345,18 +409,25 @@
     </div>
 
     <div class="hero-art">
-      <div class="hub">
-        <div class="hub-ring"></div>
-        <div class="hub-core">
-          <img src="assets/hero-team.jpg" alt="The Qalamify coaching team">
+      <div class="hero-panel">
+        <div class="hero-panel-top">
+          <img src="assets/qalamify-icon-white.png" alt="Qalamify">
+          <span class="hero-online-badge"><i></i>100% Online Coaching</span>
         </div>
-        <div class="hero-badge"><span class="badge-num">6</span><span class="badge-label">exam tracks, one team</span></div>
-        <div class="hub-tag tag-a"><i></i>CUET UG</div>
-        <div class="hub-tag tag-b"><i></i>CUET PG</div>
-        <div class="hub-tag tag-c"><i></i>NMMS</div>
-        <div class="hub-tag tag-d"><i></i>UGC NET</div>
-        <div class="hub-tag tag-e"><i></i>NCET</div>
-        <div class="hub-tag tag-f"><i></i>GATE</div>
+        <h3>Six exams. One team. Anywhere in India.</h3>
+        <div class="hero-chip-grid">
+          <div class="hero-chip"><i></i>CUET UG</div>
+          <div class="hero-chip"><i></i>CUET PG</div>
+          <div class="hero-chip"><i></i>NMMS</div>
+          <div class="hero-chip"><i></i>UGC NET</div>
+          <div class="hero-chip"><i></i>NCET</div>
+          <div class="hero-chip"><i></i>GATE</div>
+        </div>
+        <div class="hero-panel-foot">
+          <div><b>6</b><span>exam tracks</span></div>
+          <div><b>120+</b><span>mock tests/yr</span></div>
+          <div><b>48hr</b><span>doubt turnaround</span></div>
+        </div>
       </div>
     </div>
   </div>
@@ -478,26 +549,74 @@
   <section id="posters">
     <div class="wrap">
       <div class="sec-head center">
-        <span class="eyebrow">Program Posters</span>
-        <h2>See the team behind each track.</h2>
-        <p>Full, uncropped campaign visuals for each program &mdash; shown exactly as designed.</p>
+        <span class="eyebrow">Meet The Team</span>
+        <h2>The mentors leading each track.</h2>
+        <p>Real faces, real specialists &mdash; one dedicated lead per exam.</p>
       </div>
       <div class="poster-grid">
         <div class="poster-card reveal">
+          <div class="poster-top-bar"></div>
           <div class="poster-frame"><img src="assets/posters/cuet-pg.png" alt="Qalamify — Head of CUET Coaching team"></div>
-          <div class="poster-call"><span>CUET admissions</span><a href="tel:+918086307444">80863 07444</a></div>
+          <div class="poster-call">
+            <span class="poster-call-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>CUET admissions</span>
+            <a href="tel:+918086307444">80863 07444</a>
+          </div>
         </div>
         <div class="poster-card reveal">
+          <div class="poster-top-bar"></div>
           <div class="poster-frame"><img src="assets/posters/ugc-net.png" alt="Qalamify UGC NET Coaching — Learn from the Experts"></div>
-          <div class="poster-call"><span>UGC NET admissions</span><a href="tel:+918086307444">80863 07444</a></div>
+          <div class="poster-call">
+            <span class="poster-call-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>UGC NET admissions</span>
+            <a href="tel:+918086307444">80863 07444</a>
+          </div>
         </div>
         <div class="poster-card reveal">
+          <div class="poster-top-bar"></div>
           <div class="poster-frame"><img src="assets/posters/ncet.png" alt="Qalamify NCET Coaching — Head of NCET Coaching"></div>
-          <div class="poster-call"><span>NCET admissions</span><a href="tel:+918086307333">80863 07333</a></div>
+          <div class="poster-call">
+            <span class="poster-call-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>NCET admissions</span>
+            <a href="tel:+918086307333">80863 07333</a>
+          </div>
         </div>
         <div class="poster-card reveal">
+          <div class="poster-top-bar"></div>
           <div class="poster-frame"><img src="assets/posters/gate.png" alt="Qalamify GATE Coaching — Learn from the Experts"></div>
-          <div class="poster-call"><span>GATE admissions</span><a href="tel:+918086307222">80863 07222</a></div>
+          <div class="poster-call">
+            <span class="poster-call-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>GATE admissions</span>
+            <a href="tel:+918086307222">80863 07222</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="centers">
+    <div class="wrap">
+      <div class="sec-head center">
+        <span class="eyebrow">Where We Teach</span>
+        <h2>Online exam coaching. Offline school tuition.</h2>
+        <p>Two ways to learn with Qalamify, depending on what you're preparing for.</p>
+      </div>
+      <div class="centers-grid">
+        <div class="center-card online reveal">
+          <span class="center-tag">Online only</span>
+          <h3>Entrance &amp; Competitive Exam Coaching</h3>
+          <p>CUET UG, CUET PG, NMMS, UGC NET, NCET, and GATE &mdash; all six programs run fully online, so you can join from anywhere.</p>
+          <div class="center-meta">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+            <span>Live online classes &mdash; available across India</span>
+          </div>
+          <a href="registration.html" target="_blank" class="btn btn-primary">Start Admission</a>
+        </div>
+        <div class="center-card offline reveal">
+          <span class="center-tag">Offline centre</span>
+          <h3>School Tuition &mdash; Classes 8 to 12</h3>
+          <p>In-person tuition covering school syllabus for students in Classes 8 through 12, taught face-to-face at our centre.</p>
+          <div class="center-meta">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.33-7-11a7 7 0 0 1 14 0c0 5.67-7 11-7 11z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>Periya, Kasaragod District, Kerala</span>
+          </div>
+          <a href="tel:+918086307666" class="btn btn-ghost">Call to enquire</a>
         </div>
       </div>
     </div>
@@ -558,17 +677,18 @@
     <div class="wrap">
       <div class="sec-head">
         <span class="eyebrow">Batches</span>
-        <h2>Find a slot that fits your week.</h2>
+        <h2>Live online batches, open for enrollment.</h2>
+        <p>All exam-coaching programs run online &mdash; join from anywhere.</p>
       </div>
       <table class="batch-table">
-        <thead><tr><th>Track</th><th>Schedule</th><th>Mode</th><th>Next intake</th><th></th></tr></thead>
+        <thead><tr><th>Track</th><th>Mode</th><th>Next intake</th><th></th></tr></thead>
         <tbody>
-          <tr><td class="batch-name">CUET UG</td><td>Mon&ndash;Fri, evening</td><td>Online &amp; in-centre</td><td>Rolling admission</td><td><a href="registration.html" target="_blank" class="batch-cta">Enquire &rarr;</a></td></tr>
-          <tr><td class="batch-name">CUET PG</td><td>Tue / Thu / Sat</td><td>Online</td><td>Rolling admission</td><td><a href="registration.html" target="_blank" class="batch-cta">Enquire &rarr;</a></td></tr>
-          <tr><td class="batch-name">NMMS</td><td>Weekends</td><td>In-centre</td><td>Next batch monthly</td><td><a href="registration.html" target="_blank" class="batch-cta">Enquire &rarr;</a></td></tr>
-          <tr><td class="batch-name">UGC NET</td><td>Mon&ndash;Sat, flexible</td><td>Online &amp; in-centre</td><td>Rolling admission</td><td><a href="registration.html" target="_blank" class="batch-cta">Enquire &rarr;</a></td></tr>
-          <tr><td class="batch-name">NCET</td><td>Weekday &amp; weekend</td><td>Online &amp; in-centre</td><td>Rolling admission</td><td><a href="registration.html" target="_blank" class="batch-cta">Enquire &rarr;</a></td></tr>
-          <tr><td class="batch-name">GATE</td><td>Weekday &amp; weekend</td><td>Online &amp; in-centre</td><td>Rolling admission</td><td><a href="registration.html" target="_blank" class="batch-cta">Enquire &rarr;</a></td></tr>
+          <tr><td class="batch-name">CUET UG</td><td>Online</td><td>Rolling admission</td><td><a href="registration.html" target="_blank" class="batch-cta">Enquire &rarr;</a></td></tr>
+          <tr><td class="batch-name">CUET PG</td><td>Online</td><td>Rolling admission</td><td><a href="registration.html" target="_blank" class="batch-cta">Enquire &rarr;</a></td></tr>
+          <tr><td class="batch-name">NMMS</td><td>Online</td><td>Next batch monthly</td><td><a href="registration.html" target="_blank" class="batch-cta">Enquire &rarr;</a></td></tr>
+          <tr><td class="batch-name">UGC NET</td><td>Online</td><td>Rolling admission</td><td><a href="registration.html" target="_blank" class="batch-cta">Enquire &rarr;</a></td></tr>
+          <tr><td class="batch-name">NCET</td><td>Online</td><td>Rolling admission</td><td><a href="registration.html" target="_blank" class="batch-cta">Enquire &rarr;</a></td></tr>
+          <tr><td class="batch-name">GATE</td><td>Online</td><td>Rolling admission</td><td><a href="registration.html" target="_blank" class="batch-cta">Enquire &rarr;</a></td></tr>
         </tbody>
       </table>
     </div>
@@ -605,7 +725,7 @@
       </div>
       <div class="foot-col">
         <h4>Explore</h4>
-        <a href="#why">Why Qalamify</a><a href="#batches">Batches</a>
+        <a href="#centers">Where We Teach</a><a href="#why">Why Qalamify</a><a href="#batches">Batches</a>
       </div>
       <div class="foot-col">
         <h4>Contact</h4>
@@ -648,6 +768,22 @@
     });
   },{threshold:0.6});
   counters.forEach(el=>cio.observe(el));
+
+  // Mobile nav toggle
+  const navBurger = document.getElementById('navBurger');
+  const navMobilePanel = document.getElementById('navMobilePanel');
+  navBurger.addEventListener('click', () => {
+    const isOpen = navMobilePanel.classList.toggle('open');
+    navBurger.classList.toggle('open', isOpen);
+    navBurger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+  navMobilePanel.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      navMobilePanel.classList.remove('open');
+      navBurger.classList.remove('open');
+      navBurger.setAttribute('aria-expanded', 'false');
+    });
+  });
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
