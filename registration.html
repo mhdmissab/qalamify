@@ -91,6 +91,27 @@
 
   .footnote{margin-top:22px;font-size:12px;color:var(--slate);text-align:center;line-height:1.6;}
 </style>
+
+<style id="responsive-enhancements">
+  html, body { max-width: 100%; overflow-x: hidden; }
+  img, svg { max-width: 100%; }
+  button, a, input, select, textarea { touch-action: manipulation; }
+  .back-link { min-height: 44px; display: flex; align-items: center; }
+  @media (max-width: 700px) {
+    .nav-row { padding: 12px 16px; }
+    .page { gap: 28px; padding-top: 34px; }
+    .side h1 { font-size: clamp(28px, 8vw, 36px); }
+    .card { width: 100%; }
+  }
+  @media (max-width: 420px) {
+    .nav-row { padding-left: 12px; padding-right: 12px; }
+    .logo-word { font-size: 17px; }
+    .back-link { font-size: 12.5px; }
+    .page { padding-left: 12px; padding-right: 12px; }
+    .card { padding: 20px 16px; border-radius: 14px; }
+    .field input, .field select, .field textarea { font-size: 16px; }
+  }
+</style>
 </head>
 <body>
 
@@ -108,7 +129,7 @@
   <div class="side">
     <span class="eyebrow">Admission Form</span>
     <h1>Let's get your seat reserved.</h1>
-    <p>Fill this in and a mentor from your exam track will call you within one working day to confirm your batch.</p>
+    <p>Fill this in and send your enquiry directly to the Qalamify admissions team on WhatsApp. A mentor will follow up to confirm your batch.</p>
     <ul class="side-list">
       <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Free 20-minute counselling call</li>
       <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>No payment required to register interest</li>
@@ -164,7 +185,7 @@
 
         <button type="submit" class="submit-btn" id="submitBtn">
           <span class="spinner"></span>
-          <span class="btn-text">Submit registration</span>
+          <span class="btn-text">Send enquiry on WhatsApp</span>
         </button>
 
         <div class="form-msg" id="formMsg"></div>
@@ -182,69 +203,48 @@
       </div>
     </div>
 
-    <div class="footnote">By submitting, you agree to be contacted by Qalamify about admissions. We don't share your details with third parties.</div>
+    <div class="footnote">Your enquiry is prepared in WhatsApp and sent only when you tap the send button there. Qalamify uses your details only to respond to your admission enquiry.</div>
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="assets/config.js"></script>
 <script>
   const form = document.getElementById('admissionForm');
   const submitBtn = document.getElementById('submitBtn');
   const formMsg = document.getElementById('formMsg');
-  const formView = document.getElementById('formView');
-  const successView = document.getElementById('successView');
-  const sbClient = supabase.createClient(QALAMIFY_CONFIG.SUPABASE_URL, QALAMIFY_CONFIG.SUPABASE_ANON_KEY);
-
-  function showSuccess() {
-    formView.style.display = 'none';
-    successView.style.display = 'block';
-    submitBtn.classList.remove('loading');
-    submitBtn.disabled = false;
-  }
 
   function showMessage(text, type) {
     formMsg.textContent = text;
     formMsg.className = 'form-msg show ' + type;
   }
 
-  document.getElementById('registerAnother').addEventListener('click', function (e) {
-    e.preventDefault();
-    form.reset();
-    formMsg.className = 'form-msg';
-    successView.style.display = 'none';
-    formView.style.display = 'block';
-  });
-
-  form.addEventListener('submit', async function (e) {
+  form.addEventListener('submit', function (e) {
     e.preventDefault();
 
-    if (QALAMIFY_CONFIG.SUPABASE_URL.indexOf('PASTE_YOUR') === 0) {
-      showMessage('This form isn\'t connected to a database yet — follow SETUP.md to add your Supabase details.', 'err');
+    const name = document.getElementById('fullName').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const city = document.getElementById('city').value.trim();
+    const program = document.getElementById('program').value;
+    const message = document.getElementById('message').value.trim();
+
+    if (!name || !phone || !email || !program) {
+      showMessage('Please complete all required fields.', 'err');
       return;
     }
 
-    submitBtn.disabled = true;
-    submitBtn.classList.add('loading');
-    formMsg.className = 'form-msg';
+    const whatsappText = [
+      '*Qalamify Admission Enquiry*',
+      '',
+      '*Name:* ' + name,
+      '*Phone:* ' + phone,
+      '*Email:* ' + email,
+      '*City:* ' + (city || 'Not provided'),
+      '*Program:* ' + program,
+      '*Message:* ' + (message || 'No additional message')
+    ].join('\n');
 
-    const { error } = await sbClient.from('registrations').insert({
-      full_name: document.getElementById('fullName').value,
-      email: document.getElementById('email').value,
-      phone: document.getElementById('phone').value,
-      program: document.getElementById('program').value,
-      city: document.getElementById('city').value,
-      message: document.getElementById('message').value
-    });
-
-    submitBtn.disabled = false;
-    submitBtn.classList.remove('loading');
-
-    if (error) {
-      showMessage('Something went wrong — please try again in a moment.', 'err');
-      return;
-    }
-    showSuccess();
+    const whatsappUrl = 'https://wa.me/918086307222?text=' + encodeURIComponent(whatsappText);
+    window.location.href = whatsappUrl;
   });
 </script>
 
